@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Garden Markdown</title>
+    <script src="https://unpkg.com/fabric@5.3.0/dist/fabric.min.js"></script>
+</head>
+<body>
+    <form id="imageUploadForm" enctype="multipart/form-data">
+        <label for="imageInput">Choose an image:</label>
+        <input type="file" id="imageInput" name="image" accept="image/*" multiple>
+        <button type="button" onclick="uploadImage(); quickAdd();">Upload Image</button>
+    </form>
+    <input type="range" id="mleftSlider" min="0" max="50" value="20" />
+    <input type="range" id="mtopSlider" min="0" max="50" value="10" />
+    <input type="range" id="pptSlider" min="20" max="200" value="81" />
+    <button type="button" id="download" onclick="downloadImage();">Download image</button>
+    <button type="button" id="resetDefaults" onclick="defaultVars();">Reset defaults</button>
+    <button type="button" id="cycle" onclick="cycleImages();">Cycle</button>
+    <p id="coords">Coords: 0, 0</p>
+
+
+    <canvas id="c" width="1200" height="1200" style="border:1px solid #000;"></canvas>
+
+    <script>
+        var img = null;
+        var imgInstance = null;
+        var canva = new fabric.Canvas('c');
+        var sol = new Image();
+        var xs = 0; var ys = 0;
+        var pixelsPerTile = 81;
+        var mleft = 20;
+        var mtop = 10;
+        var circleSize = 120;
+        var circleScale = 0.5;
+        var click = false;
+        var imgArr = [];
+        var imgArrAt = 0;
+        sol.src = 'https://cdn.discordapp.com/attachments/1211324681538244628/1214416270628225064/solution.png?ex=65f90849&is=65e69349&hm=6a6a76f98f16c8a4907a36ab81a13da96d54cf844780fad4a649801a0bf5b1d7&';
+
+        function l(what) { return document.getElementById(what); }
+
+        l('mleftSlider').addEventListener('input', function () {
+            mleft = parseFloat(l('mleftSlider').value);
+            redrawSelect();
+        });
+
+        l('mtopSlider').addEventListener('input', function () {
+            mtop = parseFloat(l('mtopSlider').value);
+            redrawSelect();
+        });
+
+        l('pptSlider').addEventListener('input', function () {
+            pixelsPerTile = parseFloat(l('pptSlider').value);
+            circleScale = parseFloat(l('pptSlider').value) / 162;
+            redrawSelect();
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key == 'Enter') {
+                cycleImages();
+            }
+            if (e.key == 'u') {
+                uploadImage();
+            }
+            if (e.key == 'd') {
+                defaultVars();
+            }
+            console.log('Key pressed: '+e.key)
+        });
+
+        var uc = document.getElementsByClassName('canvas-container')[0].childNodes[1];
+
+        uc.addEventListener('mouseover', e => { if (click) { selectTile(e); } })
+        uc.addEventListener('mousedown', e => { click = true; selectTile(e); })
+        uc.addEventListener('mouseup', () => { click = false; })
+
+        canva.selection = false;
+
+        function selectTile(e) {
+            let bcr = l('c').getBoundingClientRect();
+            removeLines();
+            if (e.clientX < mleft || e.clientY < mtop) { return false; }
+            xs = Math.floor((e.clientX - mleft - bcr.left - 3) / pixelsPerTile);
+            ys = Math.floor((e.clientY - mleft - bcr.top - 3) / pixelsPerTile);
+            l('coords').innerText = 'Coords: ' + xs + ', ' + ys;
+            redrawSelect();
+        }
+
+        function redrawSelect() {
+            removeLines();
+            relocate(xs * pixelsPerTile + mleft + pixelsPerTile / 2, ys * pixelsPerTile + mtop + pixelsPerTile / 2);
+            drawLine(xs * pixelsPerTile, 0, mleft); drawLine((xs + 1) * pixelsPerTile, 0, mleft);
+            drawLine(ys * pixelsPerTile, 1, mtop); drawLine((ys + 1) * pixelsPerTile, 1, mtop);
+        }
+
+        function loadSol(x,y) {
+            if (!sol.complete) { sol.addEventListener('load', function () { loadSol(); }); return false; }
+            imgInstance = new fabric.Image(sol, {
+                left: x*36+16,
+                top: y*36+4,
+                angle: 0,
+                scaleX: circleScale,
+                scaleY: circleScale,
+                originX: 'center',
+                originY: 'center',
+                selectable: false,
+                opacity: 1
+            });
+            canva.add(imgInstance);
+        }
+
+        loadSol(0, 0);
+
+        function uploadImage() {
+            var input = document.getElementById('imageInput');
+            imgArrAt = 0;
+
+            if (input.files.length > 0) {
+                imgArr = input.files;
+            } else {
+                alert('Please choose an image to upload.');
+                return false;
+            }
+
+            if (imgArr.length == 1) {
+                cycleImages();
+            }
+        }
+
+        function cycleImages() {
+            var file = imgArr[imgArrAt];
+            img = new Image();
+            img = elnuke(img);
+            img.src = URL.createObjectURL(file);
+            if (img.complete) { quickAdd(img, 0, 0); } else { img.addEventListener('load', function () { quickAdd(img, 0, 0); }); }
+            imgArrAt++;
+        }
+
+        function quickAdd(nImg, x, y) {
+            if (nImg === null) { console.log('no images!'); return false; }
+            if (typeof nImgInstance !== 'undefined') { canva.remove(nImgInstance); }
+            nImgInstance = new fabric.Image(nImg, {
+                left: x*pixelsPerTile,
+                top: y*pixelsPerTile,
+                angle: 0,
+                selectable: false,
+                opacity: 1
+            });
+            canva.add(nImgInstance); quickResize();
+            return true;
+        }
+
+        var lines = [];
+
+        function drawLine(xy, mode, offset) {
+            //mode: 1 = horizontal, 0 = vertical
+            var rect = null;
+            if (mode) {
+                rect = new fabric.Rect({
+                    left: 0,
+                    top: xy+offset,
+                    fill: 'white',
+                    width: 1500,
+                    height: 3,
+                    angle: 0
+                });
+            } else {
+                rect = new fabric.Rect({
+                    left: xy+offset,
+                    top: 0,
+                    fill: 'white',
+                    width: 1500,
+                    height: 3,
+                    angle: 90
+                }); 
+            }
+
+            lines.push(rect);
+            canva.add(rect);
+        }
+
+        function removeLines() {
+            for (let i in lines) {
+                canva.remove(lines[i]);
+            }
+            lines = [];
+        }
+
+        function elnuke(element) {
+            var clonedElement = element.cloneNode(true);
+            return clonedElement;
+        }
+
+        function relocate(x, y) {
+            imgInstance.set({ left: x, top: y, scaleX: circleScale, scaleY: circleScale });
+            imgInstance.bringToFront();
+            canva.renderAll();
+        }
+
+        function downloadImage() {
+            removeLines();
+            canva.renderAll();
+            var dataURL = l('c').toDataURL("image/png");
+            var link = document.createElement("a");
+            link.href = dataURL;
+            link.download = "canvas_image.png";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            drawLine(xs * pixelsPerTile, 0, mleft); drawLine((xs + 1) * pixelsPerTile, 0, mleft);
+            drawLine(ys * pixelsPerTile, 1, mtop); drawLine((ys + 1) * pixelsPerTile, 1, mtop);
+        }
+
+        function quickResize(w, h) {
+            if (typeof w === 'undefined') { w = nImgInstance.width; }
+            if (typeof h === 'undefined') { h = nImgInstance.height; }
+            canva.setDimensions({ width: w, height: h });
+        }
+
+        function defaultVars() {
+            l('mleftSlider').value = 20; mleft = 20; l('mtopSlider').value = 10; mtop = 10; l('pptSlider').value = 81; pixelsPerTile = 81; circleScale = 0.5;
+            redrawSelect();
+        }
+    </script>
+    <p>Hotkeys:
+        <br>u: upload images
+        <br>Enter: next image
+        <br>d: reset defaults
+    </p>
+</body>
+</html>
