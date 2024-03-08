@@ -165,7 +165,7 @@
         }
 
         function cycleImages() {
-            var file = imgArr[imgArrAt];
+            var file = imgArr[Math.min(imgArrAt, imgArr.length)];
             img = new Image();
             img = elnuke(img);
             img.src = URL.createObjectURL(file);
