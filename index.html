@@ -69,6 +69,7 @@
             }
             if (e.key == 'Enter') {
                 downloadImage();
+                cycleImages();
             }
             if (e.key == 'u') {
                 uploadImage();
@@ -262,7 +263,7 @@
         Hotkeys:
         <br>u: upload images
         <br>Tab: next image
-        <br>Enter: download current image
+        <br>Enter: download current image (will also function as a tab)
         <br>d: reset defaults
         <br>non-movement left and right arrows: decrement and increment tile size (by 1 pixel)
         <br>left arrow and right arrow: decrement and increment x offset (by 1 pixel)
