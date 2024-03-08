@@ -65,29 +65,29 @@
                 uploadImage();
             }
             if (e.key == ',') {
-                l('pptSlider').value = Math.max(l('pptSlider').value - 1, 10);
+                l('pptSlider').value = Math.max(parseFloat(l('pptSlider').value) - 1, 10);
                 pixelsPerTile = Math.max(pixelsPerTile - 1, 10);
                 circleScale -= 1/162;
             }
             if (e.key == '.') {
-                l('pptSlider').value = Math.min(l('pptSlider').value + 1, 200);
+                l('pptSlider').value = Math.min(parseFloat(l('pptSlider').value) + 1, 200);
                 pixelsPerTile = Math.min(pixelsPerTile + 1, 200);
                 circleScale += 1/162;
             }
             if (e.key == 'ArrowLeft') {
-                l('mleftSlider').value = Math.max(l('mleftSlider').value - 1, 0);
+                l('mleftSlider').value = Math.max(parseFloat(l('mleftSlider').value) - 1, 0);
                 mleft--;
             }
             if (e.key == 'ArrowRight') {
-                l('mleftSlider').value = Math.min(l('mleftSlider').value + 1, 50);
+                l('mleftSlider').value = Math.min(parseFloat(l('mleftSlider').value) + 1, 50);
                 mleft++;
             }
             if (e.key == 'ArrowDown') {
-                l('mtopSlider').value = Math.max(l('mtopSlider').value - 1, 0);
+                l('mtopSlider').value = Math.max(parseFloat(l('mtopSlider').value) - 1, 0);
                 mtop--;
             }
             if (e.key == 'ArrowUp') {
-                l('mtopSlider').value = Math.min(l('mtopSlider').value + 1, 50);
+                l('mtopSlider').value = Math.min(parseFloat(l('mtopSlider').value) + 1, 50);
                 mtop++;
             }
             if (e.key == 'd') {
