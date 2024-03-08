@@ -202,7 +202,7 @@
         function downloadImage() {
             removeLines();
             canva.renderAll();
-            var dataURL = l('c').toDataURL("image/png");
+            var dataURL = l('c').toDataURL();
             var link = document.createElement("a");
             link.href = dataURL;
             link.download = "canvas_image.png";
