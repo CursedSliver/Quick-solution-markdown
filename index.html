@@ -15,6 +15,7 @@
     <input type="range" id="mleftSlider" min="0" max="50" value="20" />
     <input type="range" id="mtopSlider" min="0" max="50" value="10" />
     <input type="range" id="pptSlider" min="20" max="200" value="81" />
+    <input type="range" id="ccsSlider" min="20" max="300" value="100" />
     <button type="button" id="download" onclick="downloadImage();">Download image</button>
     <button type="button" id="resetDefaults" onclick="defaultVars();">Reset defaults</button>
     <button type="button" id="cycle" onclick="cycleImages();">Cycle</button>
@@ -23,8 +24,7 @@
 
     <canvas id="c" width="500" height="500" style="border:1px solid #000;"></canvas>
 
-    <script>
-        var img = null;
+    <script>var img = null;
         var imgInstance = null;
         var canva = new fabric.Canvas('c');
         var sol = new Image();
@@ -34,6 +34,7 @@
         var mtop = 10;
         var circleSize = 120;
         var circleScale = 0.5;
+        var centeredCircleScale = 1;
         var click = false;
         var imgArr = [];
         var imgArrAt = 0;
@@ -57,6 +58,11 @@
             redrawSelect();
         });
 
+        l('ccsSlider').addEventListener('input', function () {
+            centeredCircleScale = parseFloat(l('pptSlider').value) / 100;
+            redrawSelect();
+        });
+
         document.addEventListener('keydown', function (e) {
             if (e.key == 'Enter') {
                 cycleImages();
@@ -67,12 +73,12 @@
             if (e.key == ',') {
                 l('pptSlider').value = Math.max(parseFloat(l('pptSlider').value) - 1, 10);
                 pixelsPerTile = Math.max(pixelsPerTile - 1, 10);
-                circleScale -= 1/162;
+                circleScale -= 1 / 162;
             }
             if (e.key == '.') {
                 l('pptSlider').value = Math.min(parseFloat(l('pptSlider').value) + 1, 200);
                 pixelsPerTile = Math.min(pixelsPerTile + 1, 200);
-                circleScale += 1/162;
+                circleScale += 1 / 162;
             }
             if (e.key == 'ArrowLeft') {
                 l('mleftSlider').value = Math.max(parseFloat(l('mleftSlider').value) - 1, 0);
@@ -121,14 +127,14 @@
             drawLine(ys * pixelsPerTile, 1, mtop); drawLine((ys + 1) * pixelsPerTile, 1, mtop);
         }
 
-        function loadSol(x,y) {
+        function loadSol(x, y) {
             if (!sol.complete) { sol.addEventListener('load', function () { loadSol(); }); return false; }
             imgInstance = new fabric.Image(sol, {
-                left: x*36+16,
-                top: y*36+4,
+                left: x * 36 + 16,
+                top: y * 36 + 4,
                 angle: 0,
-                scaleX: circleScale,
-                scaleY: circleScale,
+                scaleX: circleScale * centeredCircleScale,
+                scaleY: circleScale * centeredCircleScale,
                 originX: 'center',
                 originY: 'center',
                 selectable: false,
@@ -168,8 +174,8 @@
             if (nImg === null) { console.log('no images!'); return false; }
             if (typeof nImgInstance !== 'undefined') { canva.remove(nImgInstance); }
             nImgInstance = new fabric.Image(nImg, {
-                left: x*pixelsPerTile,
-                top: y*pixelsPerTile,
+                left: x * pixelsPerTile,
+                top: y * pixelsPerTile,
                 angle: 0,
                 selectable: false,
                 opacity: 1
@@ -186,7 +192,7 @@
             if (mode) {
                 rect = new fabric.Rect({
                     left: 0,
-                    top: xy+offset,
+                    top: xy + offset,
                     fill: 'white',
                     width: 1500,
                     height: 3,
@@ -194,13 +200,13 @@
                 });
             } else {
                 rect = new fabric.Rect({
-                    left: xy+offset,
+                    left: xy + offset,
                     top: 0,
                     fill: 'white',
                     width: 1500,
                     height: 3,
                     angle: 90
-                }); 
+                });
             }
 
             lines.push(rect);
@@ -220,7 +226,7 @@
         }
 
         function relocate(x, y) {
-            imgInstance.set({ left: x, top: y, scaleX: circleScale, scaleY: circleScale });
+            imgInstance.set({ left: x, top: y, scaleX: circleScale * centeredCircleScale, scaleY: circleScale * centeredCircleScale });
             imgInstance.bringToFront();
             canva.renderAll();
         }
@@ -248,9 +254,9 @@
         function defaultVars() {
             l('mleftSlider').value = 20; mleft = 20; l('mtopSlider').value = 10; mtop = 10; l('pptSlider').value = 81; pixelsPerTile = 81; circleScale = 0.5;
             redrawSelect();
-        }
-    </script>
-    <p>Hotkeys:
+        }</script>
+    <p>
+        Hotkeys:
         <br>u: upload images
         <br>Enter: next image
         <br>d: reset defaults
