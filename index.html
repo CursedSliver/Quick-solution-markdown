@@ -21,7 +21,7 @@
     <p id="coords">Coords: 0, 0</p>
 
 
-    <canvas id="c" width="1200" height="1200" style="border:1px solid #000;"></canvas>
+    <canvas id="c" width="500" height="500" style="border:1px solid #000;"></canvas>
 
     <script>
         var img = null;
@@ -64,10 +64,36 @@
             if (e.key == 'u') {
                 uploadImage();
             }
+            if (e.key == ',') {
+                l('pptSlider').value = Math.max(l('pptSlider').value - 1, 10);
+                pixelsPerTile = Math.max(pixelsPerTile - 1, 10);
+                circleScale -= 1/162;
+            }
+            if (e.key == '.') {
+                l('pptSlider').value = Math.min(l('pptSlider').value + 1, 200);
+                pixelsPerTile = Math.min(pixelsPerTile + 1, 200);
+                circleScale += 1/162;
+            }
+            if (e.key == 'ArrowLeft') {
+                l('mleftSlider').value = Math.max(l('mleftSlider').value - 1, 0);
+                mleft--;
+            }
+            if (e.key == 'ArrowRight') {
+                l('mleftSlider').value = Math.min(l('mleftSlider').value + 1, 50);
+                mleft++;
+            }
+            if (e.key == 'ArrowDown') {
+                l('mtopSlider').value = Math.max(l('mtopSlider').value - 1, 0);
+                mtop--;
+            }
+            if (e.key == 'ArrowUp') {
+                l('mtopSlider').value = Math.min(l('mtopSlider').value + 1, 50);
+                mtop++;
+            }
             if (e.key == 'd') {
                 defaultVars();
             }
-            console.log('Key pressed: '+e.key)
+            redrawSelect();
         });
 
         var uc = document.getElementsByClassName('canvas-container')[0].childNodes[1];
@@ -228,6 +254,9 @@
         <br>u: upload images
         <br>Enter: next image
         <br>d: reset defaults
+        <br>non-movement left and right arrows: decrement and increment tile size (by 1 pixel)
+        <br>left arrow and right arrow: decrement and increment x offset (by 1 pixel)
+        <br>up arrow and down arrow: decrement and increment y offset (by 1 pixel)
     </p>
 </body>
 </html>
