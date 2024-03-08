@@ -15,7 +15,7 @@
     <input type="range" id="mleftSlider" min="0" max="50" value="20" />
     <input type="range" id="mtopSlider" min="0" max="50" value="10" />
     <input type="range" id="pptSlider" min="20" max="200" value="81" />
-    <input type="range" id="ccsSlider" min="20" max="300" value="120" />
+    <input type="range" id="ccsSlider" min="20" max="300" value="110" />
     <button type="button" id="download" onclick="downloadImage();">Download image</button>
     <button type="button" id="resetDefaults" onclick="defaultVars();">Reset defaults</button>
     <button type="button" id="cycle" onclick="cycleImages();">Cycle</button>
@@ -34,7 +34,7 @@
         var mtop = 10;
         var circleSize = 120;
         var circleScale = 0.5;
-        var centeredCircleScale = 1.2;
+        var centeredCircleScale = 1.1;
         var click = false;
         var imgArr = [];
         var imgArrAt = 0;
@@ -255,7 +255,7 @@
             l('mleftSlider').value = 20; mleft = 20; 
             l('mtopSlider').value = 10; mtop = 10; 
             l('pptSlider').value = 81; pixelsPerTile = 81; circleScale = 0.5;
-            l('ccsSlider').value = 120; centeredCircleScale = 1.2;
+            l('ccsSlider').value = 110; centeredCircleScale = 1.1;
             redrawSelect();
         }</script>
     <p>
