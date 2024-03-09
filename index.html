@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quick Garden Markdown</title>
+    <link href="style.css" rel="stylesheet">
     <script src="https://unpkg.com/fabric@5.3.0/dist/fabric.min.js"></script>
 </head>
 <body>
@@ -19,12 +20,19 @@
     <button type="button" id="download" onclick="downloadImage();">Download image</button>
     <button type="button" id="resetDefaults" onclick="defaultVars();">Reset defaults</button>
     <button type="button" id="cycle" onclick="cycleImages();">Cycle</button>
+    <br>
+    <button type="button" id="portalEnable" onclick="enablePortals();">Portal mode</button>
+    <button type="button" id="portalSwitch" class="inactive" onclick="nextPortal();">Next portal</button>
+    <label for="portalSwitch" id="portalSwitchLabel" class="inactive">Current: Blue (1)</label>
+    <button type="button" id="portalPlace" class="inactive" onclick="spawnPortal();">Place portal</button>
+    <br>
     <p id="coords">Coords: 0, 0</p>
 
 
     <canvas id="c" width="500" height="500" style="border:1px solid #000;"></canvas>
 
-    <script>var img = null;
+    <script>
+        var img = null;
         var imgInstance = null;
         var canva = new fabric.Canvas('c');
         var sol = new Image(); sol.src = 'images/solution.png';
@@ -157,6 +165,19 @@
             });
             cUsing = 'solution';
             canva.add(imgInstance);
+        }
+
+        function enablePortals() {
+            l('portalSwitch').classList.remove('inactive'); l('portalSwitchLabel').classList.remove('inactive'); l('portalPlace').classList.remove('inactive');
+            loadPortal(0);
+        }
+
+        var portalColors = ['Blue', 'Green', 'Yellow', 'Red'];
+        function nextPortal() {
+            if (!cUsing.includes('portal')) { return false; }
+            let num = parseInt(cUsing.slice(6,cUsing.length));
+            loadPortal(num); num++;
+            l('portalSwitchLabel').innerText = portalColors[num] + ' (' + num + ')';
         }
 
         function loadPortal(num) {
