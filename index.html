@@ -198,8 +198,10 @@
                 angle: 0,
                 left: imgInstance.left,
                 top: imgInstance.top,
-                scaleX: circleScale * centeredCircleScale * portalFactor * mirrorX(rotation),
-                scaleY: circleScale * centeredCircleScale * portalFactor * mirrorY(rotation),
+                scaleX: circleScale * centeredCircleScale * portalFactor,
+                scaleY: circleScale * centeredCircleScale * portalFactor,
+                flipX: mirrorX(rotation),
+                flipY: mirrorY(rotation),
                 originX: 'center',
                 originY: 'center',
                 selectable: false,
@@ -218,6 +220,8 @@
                 top: imgInstance.top,
                 scaleX: imgInstance.scaleX,
                 scaleY: imgInstance.scaleY,
+                flipX: imgInstance.flipX,
+                flipY: imgInstance.flipY,
                 originX: 'center',
                 originY: 'center',
                 selectable: false,
@@ -229,15 +233,15 @@
         }
 
         function mirrorX(rot) {
-            if (!cUsing.includes('portal')) { return 1; }
-            if (rot == 1 || rot == 3) { return -1; }
-            return 1;
+            if (!cUsing.includes('portal')) { return false; }
+            if (rot == 1 || rot == 3) { return true; }
+            return false;
         }
 
         function mirrorY(rot) {
-            if (!cUsing.includes('portal')) { return 1; }
-            if (rot == 2 || rot == 3) { return -1; }
-            return 1;
+            if (!cUsing.includes('portal')) { return false; }
+            if (rot == 2 || rot == 3) { return true; }
+            return false;
         }
 
         function uploadImage() {
@@ -328,7 +332,7 @@
         }
 
         function relocate(x, y) {
-            imgInstance.set({ left: x, top: y, scaleX: circleScale * centeredCircleScale * portalFactor * mirrorX(rotation), scaleY: circleScale * centeredCircleScale * portalFactor * mirrorY(rotation) });
+            imgInstance.set({ left: x, top: y, flipX: mirrorX(rotation), flipY: mirrorY(rotation), scaleX: circleScale * centeredCircleScale * portalFactor, scaleY: circleScale * centeredCircleScale * portalFactor });
             imgInstance.bringToFront();
             canva.renderAll();
         }
