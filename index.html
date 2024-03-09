@@ -32,7 +32,7 @@
             loadSol(0, 0);
         }
         var portals = []; for (let i = 1; i <= 4; i++) { let ii = new Image(); ii.src = 'images/Portal_'+i+'.png'; portals.push(ii); }
-        var portalsE = [[], [], [], []];
+        var portalsE = [[], [], [], []]; var portalFactor = 0.5;
         var cUsing = 'solution';
         var rotation = 0;
         var xs = 0; var ys = 0;
@@ -161,8 +161,8 @@
             canva.remove(imgInstance);
             imgInstance = new fabric.Image(portals[num], {
                 angle: 0,
-                scaleX: circleScale * centeredCircleScale * mirrorX(rotation),
-                scaleY: circleScale * centeredCircleScale * mirrorY(rotation),
+                scaleX: circleScale * centeredCircleScale * portalFactor * mirrorX(rotation),
+                scaleY: circleScale * centeredCircleScale * portalFactor * mirrorY(rotation),
                 originX: 'center',
                 originY: 'center',
                 selectable: false,
