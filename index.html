@@ -42,7 +42,7 @@
         var circleSize = 120;
         var circleScale = 0.5;
         var centeredCircleScale = 1.1;
-        var portalFactor = 1;
+        var portalFactor = 0.5;
         var click = false;
         var imgArr = [];
         var imgArrAt = 0;
@@ -167,8 +167,26 @@
                 originY: 'center',
                 selectable: false,
                 opacity: 1,
-            })
+            });
             canva.add(imgInstance);
+        }
+
+        function spawnPortal() {
+            if (!cUsing.includes('portal')) { return false; }
+            let num = parseInt(cUsing.slice(6,cUsing.length))-1;
+            let u = new fabric.Image(portals[num], {
+                angle: imgInstance.angle,
+                left: imgInstance.left,
+                top: imgInstance.top,
+                scaleX: imgInstance.scaleX,
+                scaleY: imgInstance.scaleY,
+                originX: 'center',
+                originY: 'center',
+                selectable: false,
+                opacity: imgInstance.opacity
+            });
+            portalsE[num].push(u);
+            canva.add(u);
         }
 
         function mirrorX(rot) {
