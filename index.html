@@ -27,7 +27,10 @@
     <script>var img = null;
         var imgInstance = null;
         var canva = new fabric.Canvas('c');
-        var sol = new Image();
+        var sol = new Image(); sol.src = 'images/solution.png';
+        sol.onload = function () {
+            loadSol(0, 0);
+        }
         var xs = 0; var ys = 0;
         var pixelsPerTile = 81;
         var mleft = 20;
@@ -38,7 +41,6 @@
         var click = false;
         var imgArr = [];
         var imgArrAt = 0;
-        sol.src = 'images/solution.png';
 
         function l(what) { return document.getElementById(what); }
 
@@ -134,7 +136,7 @@
         }
 
         function loadSol(x, y) {
-            if (!sol.complete) { sol.addEventListener('load', function () { loadSol(); }); return false; }
+            //if (!sol.complete) { sol.addEventListener('load', function () { loadSol(); }); return false; }
             imgInstance = new fabric.Image(sol, {
                 left: x * 36 + 16,
                 top: y * 36 + 4,
@@ -148,8 +150,6 @@
             });
             canva.add(imgInstance);
         }
-
-        loadSol(0, 0);
 
         function uploadImage() {
             var input = document.getElementById('imageInput');
