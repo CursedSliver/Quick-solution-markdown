@@ -193,6 +193,7 @@
         function loadPortal(num) {
             canva.remove(imgInstance);
             portalFactor = 0.4;
+            rotation = portalsE[num].length % 4;
             imgInstance = new fabric.Image(portals[num], {
                 angle: 0,
                 left: imgInstance.left,
@@ -227,11 +228,13 @@
         }
 
         function mirrorX(rot) {
+            if (!cUsing.includes('portal')) { return 1; }
             if (rot == 1 || rot == 3) { return -1; }
             return 1;
         }
 
         function mirrorY(rot) {
+            if (!cUsing.includes('portal')) { return 1; }
             if (rot == 2 || rot == 3) { return -1; }
             return 1;
         }
@@ -324,7 +327,7 @@
         }
 
         function relocate(x, y) {
-            imgInstance.set({ left: x, top: y, scaleX: circleScale * centeredCircleScale * portalFactor, scaleY: circleScale * centeredCircleScale * portalFactor });
+            imgInstance.set({ left: x, top: y, scaleX: circleScale * centeredCircleScale * portalFactor * mirrorX(rotation), scaleY: circleScale * centeredCircleScale * portalFactor * mirrorY(rotation) });
             imgInstance.bringToFront();
             canva.renderAll();
         }
