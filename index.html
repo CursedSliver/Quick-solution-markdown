@@ -25,13 +25,14 @@
     <button type="button" id="portalSwitch" class="inactive" onclick="nextPortal();">Next portal</button>
     <label for="portalSwitch" id="portalSwitchLabel" class="inactive">Current: Blue (1)</label>
     <button type="button" id="portalPlace" class="inactive" onclick="spawnPortal();">Place portal</button>
-    <button type="button" id="clear" onclick="clear();">Clear all placed objects</button>
+    <button type="button" id="clearAll" onclick="clear();">Clear all placed objects</button>
     <br>
 
 
     <canvas id="c" width="500" height="500" style="border:1px solid #000;"></canvas>
 
     <script>
+        
         var img = null;
         var imgInstance = null;
         var canva = new fabric.Canvas('c');
@@ -56,6 +57,11 @@
         var imgArrAt = 0;
 
         function l(what) { return document.getElementById(what); }
+
+        //why do I need to do this???
+        l('clearAll').addEventListener('click', function () {
+            clear();
+        })
 
         l('mleftSlider').addEventListener('input', function () {
             mleft = parseFloat(l('mleftSlider').value);
@@ -100,6 +106,9 @@
                 if (cUsing.includes('portal')) {
                     nextPortal();
                 }
+            }
+            if (e.key == 'c') {
+                clear();
             }
             if (e.key == ',') {
                 l('pptSlider').value = Math.max(parseFloat(l('pptSlider').value) - 1, 10);
@@ -373,6 +382,7 @@
         <br>non-movement left and right arrows: decrement and increment tile size (by 1 pixel)
         <br>left arrow and right arrow: decrement and increment x offset (by 1 pixel)
         <br>up arrow and down arrow: decrement and increment y offset (by 1 pixel)
+        <br>c: clear all placed objects
         <br>p: spawn current portal (only available in portal mode)
         <br>n: cycle to next portal (only available in portal mode)
     </p>
