@@ -42,7 +42,7 @@
         var circleSize = 120;
         var circleScale = 0.5;
         var centeredCircleScale = 1.1;
-        var portalFactor = 1;
+        var portalFactor = 1; 
         var click = false;
         var imgArr = [];
         var imgArrAt = 0;
@@ -161,7 +161,7 @@
 
         function loadPortal(num) {
             canva.remove(imgInstance);
-            portalFactor = 0.5;
+            portalFactor = 0.4;
             imgInstance = new fabric.Image(portals[num], {
                 angle: 0,
                 scaleX: circleScale * centeredCircleScale * portalFactor * mirrorX(rotation),
@@ -223,6 +223,16 @@
             img.src = URL.createObjectURL(file);
             if (img.complete) { quickAdd(img, 0, 0); } else { img.addEventListener('load', function () { quickAdd(img, 0, 0); }); }
             imgArrAt++;
+            clear();
+        }
+
+        function clear() {
+            for (let i in portalsE) {
+                for (let ii in portalsE[i]) {
+                    canva.remove(portalsE[i][ii]);
+                    portalsE[i].shift();
+                }
+            }
         }
 
         function quickAdd(nImg, x, y) {
