@@ -143,6 +143,7 @@
         function loadSol(x, y) {
             //if (!sol.complete) { sol.addEventListener('load', function () { loadSol(); }); return false; }
             canva.remove(imgInstance);
+            portalFactor = 1;
             imgInstance = new fabric.Image(sol, {
                 left: x * 36 + 16,
                 top: y * 36 + 4,
@@ -160,7 +161,7 @@
 
         function loadPortal(num) {
             canva.remove(imgInstance);
-            portalFactor = 1;
+            portalFactor = 0.5;
             imgInstance = new fabric.Image(portals[num], {
                 angle: 0,
                 scaleX: circleScale * centeredCircleScale * portalFactor * mirrorX(rotation),
@@ -176,7 +177,6 @@
 
         function spawnPortal() {
             if (!cUsing.includes('portal')) { return false; }
-            portalFactor = 0.5;
             let num = parseInt(cUsing.slice(6,cUsing.length));
             let u = new fabric.Image(portals[num], {
                 angle: imgInstance.angle,
