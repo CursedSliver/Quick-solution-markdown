@@ -91,6 +91,16 @@
             if (e.key == 'u') {
                 uploadImage();
             }
+            if (e.key == 'p') {
+                if (cUsing.includes('portal')) {
+                    spawnPortal();
+                }
+            }
+            if (e.key == 'n') {
+                if (cUsing.includes('portal')) {
+                    nextPortal();
+                }
+            }
             if (e.key == ',') {
                 l('pptSlider').value = Math.max(parseFloat(l('pptSlider').value) - 1, 10);
                 pixelsPerTile = Math.max(pixelsPerTile - 1, 10);
@@ -177,7 +187,7 @@
             let num = parseInt(cUsing.slice(6,cUsing.length));
             num++; if (num >= portals.length) { num = 0; } 
             loadPortal(num); num++;
-            l('portalSwitchLabel').innerText = portalColors[num] + ' (' + num + ')';
+            l('portalSwitchLabel').innerText = portalColors[num-1] + ' (' + num + ')';
         }
 
         function loadPortal(num) {
@@ -185,6 +195,8 @@
             portalFactor = 0.4;
             imgInstance = new fabric.Image(portals[num], {
                 angle: 0,
+                left: imgInstance.left,
+                top: imgInstance.top,
                 scaleX: circleScale * centeredCircleScale * portalFactor * mirrorX(rotation),
                 scaleY: circleScale * centeredCircleScale * portalFactor * mirrorY(rotation),
                 originX: 'center',
@@ -251,8 +263,8 @@
             for (let i in portalsE) {
                 for (let ii in portalsE[i]) {
                     canva.remove(portalsE[i][ii]);
-                    portalsE[i].shift();
                 }
+                portalsE[i] = [];
             }
         }
 
@@ -353,6 +365,8 @@
         <br>non-movement left and right arrows: decrement and increment tile size (by 1 pixel)
         <br>left arrow and right arrow: decrement and increment x offset (by 1 pixel)
         <br>up arrow and down arrow: decrement and increment y offset (by 1 pixel)
+        <br>p: spawn current portal (only available in portal mode)
+        <br>n: cycle to next portal (only available in portal mode)
     </p>
 </body>
 </html>
