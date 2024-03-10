@@ -22,6 +22,7 @@
     <button type="button" id="cycle" onclick="cycleImages();">Cycle</button>
     <br>
     <button type="button" id="modeSwitch" onclick="switchModes();">Switch modes</button>
+    <label for="modeSwitch" id="modeSwitchLabel">Current mode: Solutions</label>
     <button type="button" id="portalSwitch" class="inactive" onclick="nextPortal();">Next portal</button>
     <label for="portalSwitch" id="portalSwitchLabel" class="inactive">Current: Blue (1)</label>
     <button type="button" id="portalPlace" class="inactive" onclick="spawnPortal();">Place portal</button>
@@ -174,10 +175,12 @@
         function switchModes() {
             if (cUsing.includes('solution')) {
                 enablePortals();
+                l('modeSwitchLabel').innerText = 'Current mode: Portals';
                 return true;
             }
             if (cUsing.includes('portal')) {
                 enableSolutions();
+                l('modeSwitchLabel').innerText = 'Current mode: Solutions';
                 return true;
             }
             return false;
