@@ -174,10 +174,13 @@
         function switchModes() {
             if (cUsing.includes('solution')) {
                 enablePortals();
+                return true;
             }
             if (cUsing.includes('portal')) {
                 enableSolutions();
+                return true;
             }
+            return false;
         }
 
         function loadSol() {
