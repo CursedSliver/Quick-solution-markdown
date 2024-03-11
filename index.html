@@ -309,8 +309,10 @@
                 }
                 portalsE[i] = [];
             }
-            let num = parseInt(cUsing.slice(6,cUsing.length));
-            loadPortal(num);
+            if (cUsing.includes('portal')) { 
+                let num = parseInt(cUsing.slice(6,cUsing.length));
+                loadPortal(num);
+            }
         }
 
         function quickAdd(nImg, x, y) {
