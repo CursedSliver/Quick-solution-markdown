@@ -377,7 +377,10 @@
         }
 
         function downloadImage() {
-            removeLines();
+            removeLines(); 
+            if (cUsing.includes('portal')) {
+                canva.remove(imgInstance);
+            }
             canva.renderAll();
             var dataURL = l('c').toDataURL();
             var link = document.createElement("a");
@@ -388,6 +391,9 @@
             document.body.removeChild(link);
             drawLine(xs * pixelsPerTile, 0, mleft); drawLine((xs + 1) * pixelsPerTile, 0, mleft);
             drawLine(ys * pixelsPerTile, 1, mtop); drawLine((ys + 1) * pixelsPerTile, 1, mtop);
+            if (cUsing.includes('portal')) {
+                canva.add(imgInstance);
+            }
         }
 
         function quickResize(w, h) {
