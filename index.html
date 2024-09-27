@@ -176,6 +176,7 @@
             if (cUsing.includes('solution')) {
                 enablePortals();
                 l('modeSwitchLabel').innerText = 'Current mode: Portals';
+				l('portalSwitchLabel').innerText = portalColors[0] + ' (' + 0 + ')';
                 return true;
             }
             if (cUsing.includes('portal')) {
@@ -206,7 +207,9 @@
         }
 
         function enablePortals() {
-            l('portalSwitch').classList.remove('inactive'); l('portalSwitchLabel').classList.remove('inactive'); l('portalPlace').classList.remove('inactive');
+            l('portalSwitch').classList.remove('inactive'); 
+			l('portalSwitchLabel').classList.remove('inactive'); 
+			l('portalPlace').classList.remove('inactive');
             loadPortal(0);
         }
 
